@@ -1,63 +1,38 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const axios = require("axios");
-const jwt = require("jsonwebtoken");
 const User = require("./models/user");
 const Chat = require("./models/chat");
-const bcrypt = require("bcrypt");
+const authRouter = require("./routes/authRoutes");
+const chatsRouter = require("./routes/chatsRoutes");
 const userRouter = require("./routes/userRoutes");
+const http = require("http");
+const socketIo = require("socket.io");
+const dotenv = require("dotenv");
 
 const saltRounds = 10;
-const SECRET_KEY = "secret";
+const SECRET_KEY = process.env.SECRET_KEY;
 
+dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: true }));
+server = http.createServer(app);
+const io = socketIo(server);
+
 try {
-  mongoose.connect(
-    "mongodb+srv://Kaushik:1231231234@cluster0.8cuhk3k.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-  );
+  mongoose.connect(process.env.MONGO_DB_URI);
   console.log("Connected to MongoDB");
 } catch (error) {
   console.log("Error while connecting to MongoDB", error);
 }
 
-// // Test
-// app.get("/", async (req, res) => {
-//   res.send("Hello world");
-// });
+app.use("/auth", authRouter);
 
-// Test
-app.get("/users", async (req, res) => {
-  try {
-    const users = await User.find({});
-    res.json(users);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+app.use("/chats", chatsRouter);
+
+app.use("/users", userRouter);
+
+server.listen(3001, () => {
+  console.log("listening on *:3001");
 });
-
-app.use("/", userRouter);
-
-app.get("/chats", async (req, res) => {
-  try {
-    if (!req.query.participants) {
-      return res
-        .status(400)
-        .json({ message: "Missing participants query parameter" });
-    }
-
-    const participants = req.query.participants.split(",");
-
-    const chats = await Chat.find({
-      participants: { $all: participants },
-    });
-
-    res.json(chats);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-app.listen(3001);

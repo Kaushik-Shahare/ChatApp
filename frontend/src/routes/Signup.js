@@ -26,7 +26,7 @@ const Signup = () => {
     // Add your signup logic here
     axios
       .post(
-        "http://localhost:3001/signup",
+        "http://localhost:3001/auth/signup",
         {
           username: username,
           email: email,

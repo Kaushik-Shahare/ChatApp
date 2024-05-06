@@ -1,6 +1,6 @@
 import React from "react";
 
-const User = ({ user }) => {
+const User = ({ username }) => {
   return (
     <div className="flex flex-col space-y-4 justify-around">
       <div className="flex bg-blue-500 space-x-4 h-16 w-1/1 items-center">
@@ -10,7 +10,7 @@ const User = ({ user }) => {
           className="h-10 w-10 rounded-full"
         />
         <div>
-          <p className="text-lg font-bold">{user.username}</p>
+          <p className="text-lg font-bold">{username}</p>
           <p className="text-gray-630">Here is last chat</p>
         </div>
       </div>

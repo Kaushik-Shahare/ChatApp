@@ -17,7 +17,7 @@ const Home = () => {
 
   return (
     <div className="h-screen ">
-      {/* <Navbar /> */}
+      <Navbar />
       <div className="flex justify-around h-full">
         <div className="bg-white-500 h-1/1 w-1/3 ">
           <Users />
