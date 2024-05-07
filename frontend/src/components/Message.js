@@ -1,6 +1,6 @@
 import React from "react";
 
-const Chat = ({ username }) => {
+const Message = ({ username }) => {
   const username1 = localStorage.getItem("username");
   const localUsername = username1 ? username1.replace(/['"]+/g, "") : "";
 
@@ -19,7 +19,11 @@ const Chat = ({ username }) => {
           />
         </div>
       )}
-      <div className="inline-flex flex-col bg-blue-500 space-x-4 rounded-xl px-2 max-w-xl">
+      <div
+        className={`inline-flex flex-col  space-x-4 rounded-xl px-2 max-w-xl ${
+          username === localUsername ? "bg-blue-500" : "bg-sky-500"
+        }`}
+      >
         <div>
           <p className="font-bold">{username}</p>
           <p className="break-words">
@@ -45,4 +49,4 @@ const Chat = ({ username }) => {
   );
 };
 
-export default Chat;
+export default Message;

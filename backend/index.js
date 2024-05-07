@@ -1,8 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const User = require("./models/user");
-const Chat = require("./models/chat");
 const authRouter = require("./routes/authRoutes");
 const chatsRouter = require("./routes/chatsRoutes");
 const userRouter = require("./routes/userRoutes");
@@ -14,11 +12,12 @@ const saltRounds = 10;
 const SECRET_KEY = process.env.SECRET_KEY;
 
 dotenv.config();
+
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: true }));
 server = http.createServer(app);
-const io = socketIo(server);
+// const io = socketIo(server);
 
 try {
   mongoose.connect(process.env.MONGO_DB_URI);

@@ -6,7 +6,8 @@ import Home from "./routes/Home";
 
 function App() {
   return (
-    <div>
+    <div className="h-screen w-1/1 flex items-center justify-center">
+      {/* <div> */}
       <BrowserRouter>
         <Routes>
           <Route path="/home" element={<Home />} />

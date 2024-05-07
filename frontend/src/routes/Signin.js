@@ -53,23 +53,45 @@ const Signin = () => {
   };
 
   return (
-    <div>
-      <h2>Sign In</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input type="email" value={email} onChange={handleEmailChange} />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        </div>
-        <button type="submit">Sign In</button>
-      </form>
+    <div className="flex flex-col items-center justify-center min-w-96 mx-auto ">
+      <div className="w-full p-6 rounded-lg shadow-md bg-grey-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
+        <h1 className="text-3x1 font-semibold text-center text-gray-500">
+          Sign In
+        </h1>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Email:</label>
+            <input
+              type="email"
+              placeholder="Enter email"
+              className="w-full p-2 my-2 border border-gray-300 rounded-lg"
+              value={email}
+              onChange={handleEmailChange}
+            />
+          </div>
+          <div>
+            <label>Password:</label>
+            <input
+              type="password"
+              placeholder="Enter password"
+              className="w-full p-2 my-2 border border-gray-300 rounded-lg"
+              value={password}
+              onChange={handlePasswordChange}
+            />
+          </div>
+          <a className="text-gray-500" href="/signup">
+            Don't have an account?
+          </a>
+          <div>
+            <button
+              className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              type="submit"
+            >
+              Sign In
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

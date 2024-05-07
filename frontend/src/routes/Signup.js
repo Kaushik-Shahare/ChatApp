@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [username, setUsername] = useState("");
+  const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -11,6 +12,10 @@ const Signup = () => {
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
+  };
+
+  const handleFullnameChange = (e) => {
+    setFullname(e.target.value);
   };
 
   const handleEmailChange = (e) => {
@@ -29,6 +34,7 @@ const Signup = () => {
         "http://localhost:3001/auth/signup",
         {
           username: username,
+          fullName: fullname,
           email: email,
           password: password,
         },
@@ -52,45 +58,68 @@ const Signup = () => {
           navigate("/signin");
         }
       });
-    console.log("Username:", username);
-    console.log("Email:", email);
-    console.log("Password:", password);
   };
 
   return (
-    <div>
-      <h2>Signup</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={handleUsernameChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="text"
-            id="email"
-            value={email}
-            onChange={handleEmailChange}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        </div>
-        <button type="submit">Sign up</button>
-      </form>
+    <div className="flex flex-col items-center justify-center min-w-96 mx-auto ">
+      <div className="w-full p-6 rounded-lg shadow-md bg-grey-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
+        <h1 className="text-3x1 font-semibold text-center text-gray-500">
+          Sign Up
+        </h1>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Username:</label>
+            <input
+              type="text"
+              placeholder="Enter username"
+              className="w-full p-2 my-2 border border-gray-300 rounded-lg"
+              value={username}
+              onChange={handleUsernameChange}
+            />
+          </div>
+          <div>
+            <label>Full Name:</label>
+            <input
+              type="text"
+              placeholder="Enter full name"
+              className="w-full p-2 my-2 border border-gray-300 rounded-lg"
+              value={fullname}
+              onChange={handleFullnameChange}
+            />
+          </div>
+          <div>
+            <label>Email:</label>
+            <input
+              type="email"
+              placeholder="Enter email"
+              className="w-full p-2 my-2 border border-gray-300 rounded-lg"
+              value={email}
+              onChange={handleEmailChange}
+            />
+          </div>
+          <div>
+            <label>Password:</label>
+            <input
+              type="password"
+              placeholder="Enter password"
+              className="w-full p-2 my-2 border border-gray-300 rounded-lg"
+              value={password}
+              onChange={handlePasswordChange}
+            />
+          </div>
+          <a className="text-gray-500" href="/signin">
+            Already have an account?
+          </a>
+          <div>
+            <button
+              className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              type="submit"
+            >
+              Sign Up
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
