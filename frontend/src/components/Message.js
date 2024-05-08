@@ -1,8 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-const Message = ({ username }) => {
+const Message = ({ userId, message }) => {
+  const [username, setUsername] = useState("");
   const username1 = localStorage.getItem("username");
   const localUsername = username1 ? username1.replace(/['"]+/g, "") : "";
+
+  useEffect(() => {
+    try {
+      axios
+        .get(`http://localhost:3001/users/${userId}`, {
+          headers: {
+            Authorization:
+              "Bearer " + localStorage.getItem("token").split('"')[1],
+          },
+        })
+        .then((response) => {
+          setUsername(response.data.username);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  }, [userId]);
 
   return (
     <div
@@ -26,11 +45,7 @@ const Message = ({ username }) => {
       >
         <div>
           <p className="font-bold">{username}</p>
-          <p className="break-words">
-            Hello this is a demo chat and this is the paragraph to test if the
-            paragraph starts with next line if this excides certain limit of
-            this line
-          </p>
+          <p className="break-words">{message}</p>
         </div>
         <div className="">
           <a>time</a>

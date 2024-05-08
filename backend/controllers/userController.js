@@ -13,4 +13,18 @@ const getUsersForSidebar = async (req, res) => {
   }
 };
 
-module.exports = { getUsersForSidebar };
+const getUsernameById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).select("username");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json(user);
+  } catch (err) {
+    console.log("Error in getUsernameById: ", err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = { getUsersForSidebar, getUsernameById };

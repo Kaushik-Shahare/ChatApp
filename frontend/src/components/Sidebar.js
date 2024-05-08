@@ -3,13 +3,19 @@ import SearchInput from "./SearchInput";
 import Conversations from "./Conversations";
 import LogoutButton from "./LogoutButton";
 
-const Sidebar = () => {
+const Sidebar = ({ conversations, changeConversation }) => {
   return (
     <div className="flex flex-col justify-between">
       <div>
-        <SearchInput />
+        <SearchInput
+          conversations={conversations}
+          changeConversation={changeConversation}
+        />
         <hr className="border-t border-gray-300 mx-3 my-4" />
-        <Conversations />
+        <Conversations
+          conversations={conversations}
+          changeConversation={changeConversation}
+        />
       </div>
       <div className="w-full">
         <LogoutButton />

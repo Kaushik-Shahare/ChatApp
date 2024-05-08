@@ -74,6 +74,9 @@ const getMessages = async (req, res) => {
     const chat = await Chat.findOne({
       participants: { $all: [senderId, receiverId] },
     }).populate("messages"); // NOT REFERENCE but the actual message
+    // const chat = await Chat.findOne({
+    //   _id: receiverId,
+    // }).populate("messages");
 
     if (!chat) {
       return res.status(200).json([]);
