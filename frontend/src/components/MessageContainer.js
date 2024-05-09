@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Messages from "./Messages";
 import MessageInput from "./MessageInput";
 import NoChatSelected from "./NoChatSelected";
-import axios from "axios";
 
-const MessageContainer = ({ conversationId }) => {
+const MessageContainer = ({ conversationId, conversationUsername }) => {
   let noChatSelected = true;
+
   if (conversationId !== "") {
     noChatSelected = false;
   }
@@ -17,7 +17,9 @@ const MessageContainer = ({ conversationId }) => {
       ) : (
         <>
           <div className="bg-slate-500 px-4 py-2 mb-2">
-            <span className="text-gray-900 font-bold">Kaushik</span>
+            <span className="text-gray-900 font-bold">
+              {conversationUsername}
+            </span>
           </div>
           <Messages conversationId={conversationId} />
           <MessageInput conversationId={conversationId} />

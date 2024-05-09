@@ -9,26 +9,30 @@ const Home = () => {
   const navigator = useNavigate();
   const [conversations, setConversations] = useState([]);
 
+  const [conversationUsername, setConversationUsername] = useState("");
   const [conversationId, setConversationId] = useState("");
 
-  const changeConversation = (id) => {
+  const changeConversation = (id, username) => {
     setConversationId(id);
+    setConversationUsername(username);
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/users", {
-        headers: {
-          Authorization:
-            "Bearer " + localStorage.getItem("token").split('"')[1],
-        },
-      })
-      .then((response) => {
-        setConversations(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data: ", error);
-      });
+    if (localStorage.getItem("token") !== null) {
+      axios
+        .get("http://localhost:3001/users", {
+          headers: {
+            Authorization:
+              "Bearer " + localStorage.getItem("token").split('"')[1],
+          },
+        })
+        .then((response) => {
+          setConversations(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data: ", error);
+        });
+    }
   }, []);
 
   useEffect(() => {
@@ -36,15 +40,19 @@ const Home = () => {
     if (!token) {
       navigator("/signin");
     }
-  }, []);
+  });
 
   return (
     <div className="flex sm:h-[450px] md:h-[550px] rounded-lg overflow-hidden bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
       <Sidebar
         conversations={conversations}
+        conversationId={conversationId}
         changeConversation={changeConversation}
       />
-      <MessageContainer conversationId={conversationId} />
+      <MessageContainer
+        conversationUsername={conversationUsername}
+        conversationId={conversationId}
+      />
     </div>
   );
 };

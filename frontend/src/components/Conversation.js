@@ -1,16 +1,22 @@
 import React from "react";
+import { useSocketContext } from "../context/SocketContext";
 
-const Conversation = ({ conversation, changeConversation }) => {
-  const isOnline = true;
+const Conversation = ({ conversation, changeConversation, conversationId }) => {
   const username = conversation.username;
+  const isSelected = conversation._id === conversationId;
+
+  const { onlineUsers } = useSocketContext();
+  const isOnline = onlineUsers ? onlineUsers.includes(conversation._id) : false;
 
   const handleConversationChange = () => {
-    changeConversation(conversation._id);
+    changeConversation(conversation._id, username);
   };
 
   return (
     <div
-      className="flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1"
+      className={`flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 ${
+        isSelected ? "bg-sky-500" : ""
+      }`}
       onClick={handleConversationChange}
     >
       <div>

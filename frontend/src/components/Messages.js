@@ -1,12 +1,29 @@
-import React, { useEffect, useState } from "react";
-import Message from "./Message";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import Message from "./Message";
+import { useSocketContext } from "../context/SocketContext";
 
 const Messages = ({ conversationId }) => {
   const [messages, setMessages] = useState([]);
+  const lastMessageRef = useRef();
+  const { socket } = useSocketContext();
 
   useEffect(() => {
-    console.log(conversationId);
+    if (socket) {
+      socket.on("newMessage", (newMessage) => {
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+      });
+    }
+
+    // Cleanup function
+    return () => {
+      if (socket) {
+        socket.off("newMessage");
+      }
+    };
+  }, [socket]);
+
+  useEffect(() => {
     try {
       axios
         .get(`http://localhost:3001/chats/${conversationId}`, {
@@ -16,7 +33,6 @@ const Messages = ({ conversationId }) => {
           },
         })
         .then((response) => {
-          console.log(response.data);
           setMessages(response.data);
         });
     } catch (err) {
@@ -24,14 +40,22 @@ const Messages = ({ conversationId }) => {
     }
   }, [conversationId]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  }, [messages]);
+
   return (
     <div className="flex flex-col p-4 space-y-2 overflow-auto">
       {messages.map((message) => (
-        <Message
-          key={message._id}
-          message={message.message}
-          userId={message.sender}
-        />
+        <div key={message._id} ref={lastMessageRef}>
+          <Message
+            key={message._id}
+            message={message.message}
+            userId={message.sender}
+          />
+        </div>
       ))}
     </div>
   );

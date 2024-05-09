@@ -1,5 +1,6 @@
 const Chat = require("../models/chat");
 const Message = require("../models/message");
+const { getReceiverSocketId } = require("../socket/socket");
 
 const chat = async (req, res) => {
   try {
@@ -52,9 +53,14 @@ const sendMessage = async (req, res) => {
       chat.messages.push(newMessage._id);
     }
 
-    // socket.io code here
-
     await Promise.all([chat.save(), newMessage.save()]);
+
+    // socket.io code here
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      // io.to only sends the message to the specific socketId/client
+      io.to(receiverSocketId).emit("message", newMessage);
+    }
 
     res.status(201).json({ message: "Message sent successfully" });
   } catch (err) {

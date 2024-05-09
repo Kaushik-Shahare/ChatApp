@@ -47,9 +47,7 @@ const Message = ({ userId, message }) => {
           <p className="font-bold">{username}</p>
           <p className="break-words">{message}</p>
         </div>
-        <div className="">
-          <a>time</a>
-        </div>
+        <div className="">time</div>
       </div>
       {username === localUsername && (
         <div className="pt-3">
