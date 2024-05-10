@@ -23,6 +23,7 @@ io.on("connection", (socket) => {
   const userId = socket.handshake.query.userId;
   if (userId != "undefined") {
     userSocketMap[userId] = socket.id;
+    console.log(userSocketMap);
   }
 
   //io.emit is used to send message to all connected clients
@@ -35,4 +36,4 @@ io.on("connection", (socket) => {
   });
 });
 
-module.exports = { app, getReceiverSocketId };
+module.exports = { app, getReceiverSocketId, io };

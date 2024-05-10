@@ -10,6 +10,7 @@ const MessageInput = ({ conversationId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (messageInput === "") return;
     try {
       await axios.post(
         `http://localhost:3001/chats/send/${conversationId}`,

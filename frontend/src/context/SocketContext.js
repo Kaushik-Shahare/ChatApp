@@ -9,11 +9,12 @@ export const useSocketContext = () => {
 export const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
+
   useEffect(() => {
     if (localStorage.getItem("token")) {
       const socket = io("http://localhost:3001", {
         query: {
-          userId: localStorage.getItem("userId"),
+          userId: localStorage.getItem("userId").split('"')[1],
         },
       });
       setSocket(socket);
@@ -29,7 +30,7 @@ export const SocketContextProvider = ({ children }) => {
       }
       setSocket(null);
     }
-  }, [socket, onlineUsers]);
+  }, [localStorage.getItem("token")]);
 
   return (
     <SocketContext.Provider value={(socket, onlineUsers)}>

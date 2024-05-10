@@ -5,7 +5,7 @@ const Conversation = ({ conversation, changeConversation, conversationId }) => {
   const username = conversation.username;
   const isSelected = conversation._id === conversationId;
 
-  const { onlineUsers } = useSocketContext();
+  const onlineUsers = useSocketContext();
   const isOnline = onlineUsers ? onlineUsers.includes(conversation._id) : false;
 
   const handleConversationChange = () => {

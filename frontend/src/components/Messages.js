@@ -8,9 +8,11 @@ const Messages = ({ conversationId }) => {
   const lastMessageRef = useRef();
   const { socket } = useSocketContext();
 
+  console.log("socket", socket);
   useEffect(() => {
     if (socket) {
-      socket.on("newMessage", (newMessage) => {
+      socket?.on("message", (newMessage) => {
+        console.log("newMessage", newMessage);
         setMessages((prevMessages) => [...prevMessages, newMessage]);
       });
     }
@@ -18,7 +20,7 @@ const Messages = ({ conversationId }) => {
     // Cleanup function
     return () => {
       if (socket) {
-        socket.off("newMessage");
+        socket?.off("newMessage");
       }
     };
   }, [socket]);
