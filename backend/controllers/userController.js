@@ -14,8 +14,13 @@ const getUsersForSidebar = async (req, res) => {
 };
 
 const getUsernameById = async (req, res) => {
+  const { id } = req.params;
+
+  if (!id || id.length !== 24) {
+    return res.status(400).json({ message: "Invalid user ID" });
+  }
+
   try {
-    const { id } = req.params;
     const user = await User.findById(id).select("username");
     if (!user) {
       return res.status(404).json({ message: "User not found" });

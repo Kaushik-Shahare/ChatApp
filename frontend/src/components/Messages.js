@@ -3,7 +3,7 @@ import axios from "axios";
 import Message from "./Message";
 import { useSocketContext } from "../context/SocketContext";
 
-const Messages = ({ conversationId }) => {
+const Messages = ({ conversationId, sendMessage }) => {
   const [messages, setMessages] = useState([]);
   const lastMessageRef = useRef();
   const { socket } = useSocketContext();
@@ -13,7 +13,7 @@ const Messages = ({ conversationId }) => {
     if (socket) {
       socket?.on("message", (newMessage) => {
         console.log("newMessage", newMessage);
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
+        setMessages((messages) => [...messages, newMessage]);
       });
     }
 
@@ -24,6 +24,12 @@ const Messages = ({ conversationId }) => {
       }
     };
   }, [socket]);
+
+  useEffect(() => {
+    if (sendMessage) {
+      setMessages((messages) => [...messages, sendMessage]);
+    }
+  }, [sendMessage]);
 
   useEffect(() => {
     try {
@@ -50,8 +56,8 @@ const Messages = ({ conversationId }) => {
 
   return (
     <div className="flex flex-col p-4 space-y-2 overflow-auto">
-      {messages.map((message) => (
-        <div key={message._id} ref={lastMessageRef}>
+      {messages.map((message, index) => (
+        <div key={index} ref={lastMessageRef}>
           <Message
             key={message._id}
             message={message.message}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const MessageInput = ({ conversationId }) => {
+const MessageInput = ({ conversationId, SendMessage }) => {
   const [messageInput, setMessageInput] = useState("");
 
   const handleChange = (e) => {
@@ -12,18 +12,22 @@ const MessageInput = ({ conversationId }) => {
     e.preventDefault();
     if (messageInput === "") return;
     try {
-      await axios.post(
-        `http://localhost:3001/chats/send/${conversationId}`,
-        {
-          message: messageInput,
-        },
-        {
-          headers: {
-            Authorization:
-              "Bearer " + localStorage.getItem("token").split('"')[1],
+      await axios
+        .post(
+          `http://localhost:3001/chats/send/${conversationId}`,
+          {
+            message: messageInput,
           },
-        }
-      );
+          {
+            headers: {
+              Authorization:
+                "Bearer " + localStorage.getItem("token").split('"')[1],
+            },
+          }
+        )
+        .then((response) => {
+          SendMessage(response.data.message);
+        });
     } catch (error) {
       console.error(error);
     }

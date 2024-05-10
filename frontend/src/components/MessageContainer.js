@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import Messages from "./Messages";
 import MessageInput from "./MessageInput";
 import NoChatSelected from "./NoChatSelected";
 
 const MessageContainer = ({ conversationId, conversationUsername }) => {
   let noChatSelected = true;
+  const [sendMessage, setSendMessage] = useState({});
+
+  const SendMessage = (message) => {
+    setSendMessage(message);
+    console.log("message", message);
+  };
 
   if (conversationId !== "") {
     noChatSelected = false;
@@ -21,8 +27,11 @@ const MessageContainer = ({ conversationId, conversationUsername }) => {
               {conversationUsername}
             </span>
           </div>
-          <Messages conversationId={conversationId} />
-          <MessageInput conversationId={conversationId} />
+          <Messages conversationId={conversationId} sendMessage={sendMessage} />
+          <MessageInput
+            conversationId={conversationId}
+            SendMessage={SendMessage}
+          />
         </>
       )}
     </div>

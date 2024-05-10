@@ -7,6 +7,7 @@ const Message = ({ userId, message }) => {
   const localUsername = username1 ? username1.replace(/['"]+/g, "") : "";
 
   useEffect(() => {
+    if (userId === undefined) return;
     try {
       axios
         .get(`http://localhost:3001/users/${userId}`, {
