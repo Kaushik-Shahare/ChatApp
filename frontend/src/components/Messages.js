@@ -6,24 +6,13 @@ import { useSocketContext } from "../context/SocketContext";
 const Messages = ({ conversationId, sendMessage }) => {
   const [messages, setMessages] = useState([]);
   const lastMessageRef = useRef();
-  const { socket } = useSocketContext();
+  const { socketMessage } = useSocketContext();
 
-  console.log("socket", socket);
   useEffect(() => {
-    if (socket) {
-      socket?.on("message", (newMessage) => {
-        console.log("newMessage", newMessage);
-        setMessages((messages) => [...messages, newMessage]);
-      });
+    if (socketMessage) {
+      setMessages((messages) => [...messages, socketMessage]);
     }
-
-    // Cleanup function
-    return () => {
-      if (socket) {
-        socket?.off("newMessage");
-      }
-    };
-  }, [socket]);
+  }, [socketMessage]);
 
   useEffect(() => {
     if (sendMessage) {
@@ -62,6 +51,9 @@ const Messages = ({ conversationId, sendMessage }) => {
             key={message._id}
             message={message.message}
             userId={message.sender}
+            time={`${new Date(message.createdAt).getHours()}:${new Date(
+              message.createdAt
+            ).getMinutes()}`}
           />
         </div>
       ))}

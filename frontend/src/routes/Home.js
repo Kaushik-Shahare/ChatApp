@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import MessageContainer from "../components/MessageContainer";
 import axios from "axios";
+import { SocketContextProvider } from "../context/SocketContext";
 
 const Home = () => {
   // Check if the user is authenticated by checking if the token is present in the local storage
@@ -43,17 +44,19 @@ const Home = () => {
   });
 
   return (
-    <div className="flex sm:h-[450px] md:h-[550px] rounded-lg overflow-hidden bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
-      <Sidebar
-        conversations={conversations}
-        conversationId={conversationId}
-        changeConversation={changeConversation}
-      />
-      <MessageContainer
-        conversationUsername={conversationUsername}
-        conversationId={conversationId}
-      />
-    </div>
+    <SocketContextProvider>
+      <div className="flex sm:h-[450px] md:h-[550px] rounded-lg overflow-hidden bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
+        <Sidebar
+          conversations={conversations}
+          conversationId={conversationId}
+          changeConversation={changeConversation}
+        />
+        <MessageContainer
+          conversationUsername={conversationUsername}
+          conversationId={conversationId}
+        />
+      </div>
+    </SocketContextProvider>
   );
 };
 

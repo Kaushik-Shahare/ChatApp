@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Message = ({ userId, message }) => {
+const Message = ({ userId, message, time }) => {
   const [username, setUsername] = useState("");
   const username1 = localStorage.getItem("username");
   const localUsername = username1 ? username1.replace(/['"]+/g, "") : "";
@@ -48,7 +48,7 @@ const Message = ({ userId, message }) => {
           <p className="font-bold">{username}</p>
           <p className="break-words">{message}</p>
         </div>
-        <div className="">time</div>
+        <div className="">{time}</div>
       </div>
       {username === localUsername && (
         <div className="pt-3">

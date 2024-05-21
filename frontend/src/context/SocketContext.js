@@ -9,6 +9,14 @@ export const useSocketContext = () => {
 export const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [socketMessage, setSocketMessage] = useState({});
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    if (localStorage.getItem("token") !== null) {
+      setToken(localStorage.getItem("token"));
+    }
+  }, [localStorage.getItem("token")]);
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -23,6 +31,10 @@ export const SocketContextProvider = ({ children }) => {
         setOnlineUsers(users);
       });
 
+      socket.on("message", (newMessage) => {
+        setSocketMessage(newMessage);
+      });
+
       return () => socket.close();
     } else {
       if (socket) {
@@ -30,10 +42,10 @@ export const SocketContextProvider = ({ children }) => {
       }
       setSocket(null);
     }
-  }, [localStorage.getItem("token")]);
+  }, [token]);
 
   return (
-    <SocketContext.Provider value={(socket, onlineUsers)}>
+    <SocketContext.Provider value={{ socketMessage, onlineUsers }}>
       {children}
     </SocketContext.Provider>
   );
