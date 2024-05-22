@@ -12,7 +12,6 @@ dotenv.config();
 app.use(express.json());
 app.use(cors({ origin: true }));
 
-
 try {
   mongoose.connect(process.env.MONGO_DB_URI);
   console.log("Connected to MongoDB");
@@ -21,7 +20,7 @@ try {
 }
 app.use("/", (req, res) => {
   res.send("Server is running");
-};
+});
 
 app.use("/auth", authRouter);
 
