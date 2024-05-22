@@ -3,25 +3,45 @@ import React, { useState } from "react";
 const SearchInput = ({ conversations, changeConversation }) => {
   const [search, setSearch] = useState("");
 
+  // const newConversation = async (username) => {
+  //   await axios.post(
+  //     "/chats/create",
+  //     { participants: [localStorage.getItem("userId")], username: username },
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+  //       },
+  //     }
+  //   );
+  // };
+
   const handleChange = (e) => {
-    e.preventDefault();
     setSearch(e.target.value);
+    console.log(search);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!search) {
+    if (search === "") {
       return;
     }
-    const conversation = conversations.find((conversation) =>
-      conversation.fullName.toLowerCase().includes(search.toLowerCase())
+    const conversation = conversations.find(
+      (conversation) =>
+        conversation.username.toLowerCase() === search.toLowerCase()
     );
-    console.log(conversation);
     if (conversation) {
-      changeConversation(conversation.id);
+      changeConversation(conversation._id, conversation.username);
       setSearch("");
     } else {
+      // const confirm = window.confirm(
+      //   "No user found with that name. Do you want to start a new conversation with the user?"
+      // );
+      // if (confirm) {
+      //   newConversation(search);
+      //   setSearch("");
+      // }
       alert("No user found with that name");
+      setSearch("");
     }
   };
 

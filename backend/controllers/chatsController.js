@@ -23,6 +23,22 @@ const chat = async (req, res) => {
   }
 };
 
+const createChat = async (req, res) => {
+  try {
+    console.log(req.body);
+    const { participants, username } = req.body;
+    let userByUsername = await User.findOne({ username: username });
+    if (userByUsername === null) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    participants.push(userByUsername._id);
+    const chat = await Chat.create({ participants });
+    res.status(201).json({ chat });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 const sendMessage = async (req, res) => {
   try {
     // the {} is the object that we are destructuring into the message variable and its a string
@@ -94,4 +110,4 @@ const getMessages = async (req, res) => {
       .json({ error: "Internal server error", message: err.message });
   }
 };
-module.exports = { chat, sendMessage, getMessages };
+module.exports = { chat, createChat, sendMessage, getMessages };

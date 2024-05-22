@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Message = ({ userId, message, time }) => {
+const Message = ({ message }) => {
   const [username, setUsername] = useState("");
   const username1 = localStorage.getItem("username");
   const localUsername = username1 ? username1.replace(/['"]+/g, "") : "";
+  const time = new Date(message.createdAt).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   useEffect(() => {
-    if (userId === undefined) return;
+    if (message.sender === undefined) return;
     try {
       axios
-        .get(`http://localhost:3001/users/${userId}`, {
+        .get(`http://localhost:3001/users/${message.sender}`, {
           headers: {
             Authorization:
               "Bearer " + localStorage.getItem("token").split('"')[1],
@@ -22,13 +26,13 @@ const Message = ({ userId, message, time }) => {
     } catch (err) {
       console.log(err);
     }
-  }, [userId]);
+  }, [message.userId]);
 
   return (
     <div
       className={`flex space-x-4 pb-3 ${
         username === localUsername ? "justify-end" : "justify-start"
-      }`}
+      } , ${message.shouldShake ? "shake" : ""}`}
     >
       {username !== localUsername && (
         <div className="pt-3">
@@ -46,7 +50,7 @@ const Message = ({ userId, message, time }) => {
       >
         <div>
           <p className="font-bold">{username}</p>
-          <p className="break-words">{message}</p>
+          <p className="break-words">{message.message}</p>
         </div>
         <div className="">{time}</div>
       </div>

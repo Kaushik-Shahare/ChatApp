@@ -47,14 +47,7 @@ const Messages = ({ conversationId, sendMessage }) => {
     <div className="flex flex-col p-4 space-y-2 overflow-auto">
       {messages.map((message, index) => (
         <div key={index} ref={lastMessageRef}>
-          <Message
-            key={message._id}
-            message={message.message}
-            userId={message.sender}
-            time={`${new Date(message.createdAt).getHours()}:${new Date(
-              message.createdAt
-            ).getMinutes()}`}
-          />
+          <Message key={message._id} message={message} />
         </div>
       ))}
     </div>

@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import io from "socket.io-client";
+import notificationSound from "../assets/sounds/notification.mp3";
 const SocketContext = createContext(null);
 
 export const useSocketContext = () => {
@@ -7,16 +8,9 @@ export const useSocketContext = () => {
 };
 
 export const SocketContextProvider = ({ children }) => {
-  const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [socketMessage, setSocketMessage] = useState({});
-  const [token, setToken] = useState(null);
-
-  useEffect(() => {
-    if (localStorage.getItem("token") !== null) {
-      setToken(localStorage.getItem("token"));
-    }
-  }, [localStorage.getItem("token")]);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -25,22 +19,19 @@ export const SocketContextProvider = ({ children }) => {
           userId: localStorage.getItem("userId").split('"')[1],
         },
       });
-      setSocket(socket);
 
       socket.on("getOnlineUsers", (users) => {
         setOnlineUsers(users);
       });
 
       socket.on("message", (newMessage) => {
+        newMessage.shouldShake = true;
+        const sound = new Audio(notificationSound);
+        sound.play();
         setSocketMessage(newMessage);
       });
 
       return () => socket.close();
-    } else {
-      if (socket) {
-        socket.disconnect();
-      }
-      setSocket(null);
     }
   }, [token]);
 

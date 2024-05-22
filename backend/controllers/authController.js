@@ -18,10 +18,8 @@ const signup = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const boyProfilePic =
-      "https://avatar.iran.liara.run/public/boy?username=${username}";
-    const girlProfilePic =
-      "https://avatar.iran.liara.run/public/gitl?username=${username}";
+    const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
+    const girlProfilePic = `https://avatar.iran.liara.run/public/gitl?username=${username}`;
 
     const result = await User.create({
       username: username,
