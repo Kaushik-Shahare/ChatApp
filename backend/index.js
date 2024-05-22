@@ -19,6 +19,9 @@ try {
 } catch (error) {
   console.log("Error while connecting to MongoDB", error);
 }
+app.use("/", (req, res) => {
+  res.send("Server is running");
+};
 
 app.use("/auth", authRouter);
 
