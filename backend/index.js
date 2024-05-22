@@ -18,7 +18,7 @@ try {
 } catch (error) {
   console.log("Error while connecting to MongoDB", error);
 }
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Server is running");
 });
 
