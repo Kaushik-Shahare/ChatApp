@@ -10,7 +10,14 @@ const { app } = require("./socket/socket");
 dotenv.config();
 
 app.use(express.json());
-app.use(cors({ origin: true }));
+app.use(
+  cors({
+    origin: [
+      "https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app",
+    ],
+    methods: ["GET", "POST"],
+  })
+);
 
 try {
   mongoose.connect(process.env.MONGO_DB_URI);
