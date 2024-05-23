@@ -12,15 +12,12 @@ const Messages = ({ conversationId, sendMessage }) => {
   const changeSender = (senderId) => {
     try {
       axios
-        .get(
-          `https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app/users/${senderId}`,
-          {
-            headers: {
-              Authorization:
-                "Bearer " + localStorage.getItem("token").split('"')[1],
-            },
-          }
-        )
+        .get(`https://chat-app-api-theta.vercel.app/users/${senderId}`, {
+          headers: {
+            Authorization:
+              "Bearer " + localStorage.getItem("token").split('"')[1],
+          },
+        })
         .then((response) => {
           setSender({ ...sender, [senderId]: response.data.username });
         });
@@ -44,15 +41,12 @@ const Messages = ({ conversationId, sendMessage }) => {
   useEffect(() => {
     try {
       axios
-        .get(
-          `https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app/chats/${conversationId}`,
-          {
-            headers: {
-              Authorization:
-                "Bearer " + localStorage.getItem("token").split('"')[1],
-            },
-          }
-        )
+        .get(`https://chat-app-api-theta.vercel.app/chats/${conversationId}`, {
+          headers: {
+            Authorization:
+              "Bearer " + localStorage.getItem("token").split('"')[1],
+          },
+        })
         .then((response) => {
           setMessages(response.data);
         });

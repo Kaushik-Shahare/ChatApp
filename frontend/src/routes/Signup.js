@@ -31,7 +31,7 @@ const Signup = () => {
     // Add your signup logic here
     axios
       .post(
-        "https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app/auth/signup",
+        "https://chat-app-api-theta.vercel.app/auth/signup",
         {
           username: username,
           fullName: fullname,
@@ -75,6 +75,7 @@ const Signup = () => {
               className="w-full p-2 my-2 border border-gray-300 rounded-lg"
               value={username}
               onChange={handleUsernameChange}
+              name="username"
             />
           </div>
           <div>
@@ -85,6 +86,7 @@ const Signup = () => {
               className="w-full p-2 my-2 border border-gray-300 rounded-lg"
               value={fullname}
               onChange={handleFullnameChange}
+              name="fullname"
             />
           </div>
           <div>
@@ -95,6 +97,7 @@ const Signup = () => {
               className="w-full p-2 my-2 border border-gray-300 rounded-lg"
               value={email}
               onChange={handleEmailChange}
+              name="email"
             />
           </div>
           <div>
@@ -105,6 +108,7 @@ const Signup = () => {
               className="w-full p-2 my-2 border border-gray-300 rounded-lg"
               value={password}
               onChange={handlePasswordChange}
+              name="password"
             />
           </div>
           <a className="text-gray-500" href="/signin">

@@ -14,7 +14,7 @@ const MessageInput = ({ conversationId, SendMessage }) => {
     try {
       await axios
         .post(
-          `https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app/chats/send/${conversationId}`,
+          `https://chat-app-api-theta.vercel.app/chats/send/${conversationId}`,
           {
             message: messageInput,
           },

@@ -21,15 +21,12 @@ const Home = () => {
   useEffect(() => {
     if (localStorage.getItem("token") !== null) {
       axios
-        .get(
-          "https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app/users",
-          {
-            headers: {
-              Authorization:
-                "Bearer " + localStorage.getItem("token").split('"')[1],
-            },
-          }
-        )
+        .get("https://chat-app-api-theta.vercel.app/users", {
+          headers: {
+            Authorization:
+              "Bearer " + localStorage.getItem("token").split('"')[1],
+          },
+        })
         .then((response) => {
           setConversations(response.data);
         })
