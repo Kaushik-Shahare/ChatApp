@@ -7,6 +7,27 @@ const Messages = ({ conversationId, sendMessage }) => {
   const [messages, setMessages] = useState([]);
   const lastMessageRef = useRef();
   const { socketMessage } = useSocketContext();
+  const [sender, setSender] = useState({});
+
+  const changeSender = (senderId) => {
+    try {
+      axios
+        .get(
+          `https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app/users/${senderId}`,
+          {
+            headers: {
+              Authorization:
+                "Bearer " + localStorage.getItem("token").split('"')[1],
+            },
+          }
+        )
+        .then((response) => {
+          setSender({ ...sender, [senderId]: response.data.username });
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     if (socketMessage) {
@@ -23,12 +44,15 @@ const Messages = ({ conversationId, sendMessage }) => {
   useEffect(() => {
     try {
       axios
-        .get(`http://localhost:3001/chats/${conversationId}`, {
-          headers: {
-            Authorization:
-              "Bearer " + localStorage.getItem("token").split('"')[1],
-          },
-        })
+        .get(
+          `https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app/chats/${conversationId}`,
+          {
+            headers: {
+              Authorization:
+                "Bearer " + localStorage.getItem("token").split('"')[1],
+            },
+          }
+        )
         .then((response) => {
           setMessages(response.data);
         });
@@ -47,7 +71,12 @@ const Messages = ({ conversationId, sendMessage }) => {
     <div className="flex flex-col p-4 space-y-2 overflow-auto">
       {messages.map((message, index) => (
         <div key={index} ref={lastMessageRef}>
-          <Message key={message._id} message={message} />
+          <Message
+            key={message._id}
+            message={message}
+            changeSender={changeSender}
+            sender={sender}
+          />
         </div>
       ))}
     </div>

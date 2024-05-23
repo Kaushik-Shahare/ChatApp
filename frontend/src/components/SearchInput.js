@@ -3,18 +3,6 @@ import React, { useState } from "react";
 const SearchInput = ({ conversations, changeConversation }) => {
   const [search, setSearch] = useState("");
 
-  // const newConversation = async (username) => {
-  //   await axios.post(
-  //     "/chats/create",
-  //     { participants: [localStorage.getItem("userId")], username: username },
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-  //       },
-  //     }
-  //   );
-  // };
-
   const handleChange = (e) => {
     setSearch(e.target.value);
     console.log(search);
@@ -33,13 +21,6 @@ const SearchInput = ({ conversations, changeConversation }) => {
       changeConversation(conversation._id, conversation.username);
       setSearch("");
     } else {
-      // const confirm = window.confirm(
-      //   "No user found with that name. Do you want to start a new conversation with the user?"
-      // );
-      // if (confirm) {
-      //   newConversation(search);
-      //   setSearch("");
-      // }
       alert("No user found with that name");
       setSearch("");
     }

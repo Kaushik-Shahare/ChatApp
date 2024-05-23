@@ -14,7 +14,7 @@ const MessageInput = ({ conversationId, SendMessage }) => {
     try {
       await axios
         .post(
-          `http://localhost:3001/chats/send/${conversationId}`,
+          `https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app/chats/send/${conversationId}`,
           {
             message: messageInput,
           },

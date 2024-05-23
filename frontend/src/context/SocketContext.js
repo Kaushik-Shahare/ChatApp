@@ -14,11 +14,14 @@ export const SocketContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      const socket = io("http://localhost:3001", {
-        query: {
-          userId: localStorage.getItem("userId").split('"')[1],
-        },
-      });
+      const socket = io(
+        "https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app/",
+        {
+          query: {
+            userId: localStorage.getItem("userId").split('"')[1],
+          },
+        }
+      );
 
       socket.on("getOnlineUsers", (users) => {
         setOnlineUsers(users);

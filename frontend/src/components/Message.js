@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 
-const Message = ({ message }) => {
+const Message = ({ message, changeSender, sender }) => {
   const [username, setUsername] = useState("");
   const username1 = localStorage.getItem("username");
   const localUsername = username1 ? username1.replace(/['"]+/g, "") : "";
@@ -12,21 +11,12 @@ const Message = ({ message }) => {
 
   useEffect(() => {
     if (message.sender === undefined) return;
-    try {
-      axios
-        .get(`http://localhost:3001/users/${message.sender}`, {
-          headers: {
-            Authorization:
-              "Bearer " + localStorage.getItem("token").split('"')[1],
-          },
-        })
-        .then((response) => {
-          setUsername(response.data.username);
-        });
-    } catch (err) {
-      console.log(err);
+    if (sender[message.sender]) {
+      setUsername(sender[message.sender]);
+    } else {
+      changeSender(message.sender);
     }
-  }, [message.userId]);
+  }, [message.sender, sender, changeSender]);
 
   return (
     <div

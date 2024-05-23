@@ -31,7 +31,7 @@ const Signup = () => {
     // Add your signup logic here
     axios
       .post(
-        "http://localhost:3001/auth/signup",
+        "https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app/auth/signup",
         {
           username: username,
           fullName: fullname,

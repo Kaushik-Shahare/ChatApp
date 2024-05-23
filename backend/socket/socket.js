@@ -18,19 +18,15 @@ const getReceiverSocketId = (receiverId) => {
 const userSocketMap = {}; //{userId: socketId}
 
 io.on("connection", (socket) => {
-  console.log("New client connected");
-
   const userId = socket.handshake.query.userId;
   if (userId != "undefined") {
     userSocketMap[userId] = socket.id;
-    console.log(userSocketMap);
   }
 
   //io.emit is used to send message to all connected clients
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
   socket.on("disconnect", () => {
-    console.log("Client disconnected");
     delete userSocketMap[userId];
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
   });

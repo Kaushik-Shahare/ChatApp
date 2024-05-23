@@ -21,12 +21,15 @@ const Home = () => {
   useEffect(() => {
     if (localStorage.getItem("token") !== null) {
       axios
-        .get("http://localhost:3001/users", {
-          headers: {
-            Authorization:
-              "Bearer " + localStorage.getItem("token").split('"')[1],
-          },
-        })
+        .get(
+          "https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app/users",
+          {
+            headers: {
+              Authorization:
+                "Bearer " + localStorage.getItem("token").split('"')[1],
+            },
+          }
+        )
         .then((response) => {
           setConversations(response.data);
         })
