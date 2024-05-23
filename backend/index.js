@@ -16,6 +16,7 @@ app.use(
       "https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app",
     ],
     methods: ["GET", "POST"],
+    credentials: true,
   })
 );
 
