@@ -21,7 +21,7 @@ const Signin = () => {
     // Add your signin logic here
     axios
       .post(
-        "https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app/signin",
+        "https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app/auth/signin",
         {
           email: email,
           password: password,
