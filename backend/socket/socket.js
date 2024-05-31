@@ -6,8 +6,7 @@ const app = express();
 server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin:
-      "https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app",
+    origin: "*",
     methods: ["GET", "POST"],
     credentials: true,
   },

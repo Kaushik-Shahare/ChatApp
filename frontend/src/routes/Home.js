@@ -21,7 +21,7 @@ const Home = () => {
   useEffect(() => {
     if (localStorage.getItem("token") !== null) {
       axios
-        .get("https://chat-app-api-theta.vercel.app/users", {
+        .get("http://localhost:3001/users", {
           headers: {
             Authorization:
               "Bearer " + localStorage.getItem("token").split('"')[1],

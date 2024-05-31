@@ -16,7 +16,7 @@ const Message = ({ message, changeSender, sender }) => {
     } else {
       changeSender(message.sender);
     }
-  }, [message.sender, sender, changeSender]);
+  }, [message.sender]);
 
   return (
     <div

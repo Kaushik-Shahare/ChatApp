@@ -14,7 +14,7 @@ export const SocketContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      const socket = io("https://chat-app-api-theta.vercel.app", {
+      const socket = io("http://localhost:3001", {
         query: {
           userId: localStorage.getItem("userId").split('"')[1],
         },

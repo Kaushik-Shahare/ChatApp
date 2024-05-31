@@ -31,7 +31,7 @@ const Signup = () => {
     // Add your signup logic here
     axios
       .post(
-        "https://chat-app-api-theta.vercel.app/auth/signup",
+        "http://localhost:3001/auth/signup",
         {
           username: username,
           fullName: fullname,

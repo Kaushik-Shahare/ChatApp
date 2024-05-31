@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -6,15 +7,14 @@ const chatsRouter = require("./routes/chatsRoutes");
 const userRouter = require("./routes/userRoutes");
 const dotenv = require("dotenv");
 const { app } = require("./socket/socket");
+const _dirname = path.resolve();
 
 dotenv.config();
 
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      "https://kaushik-shaharechatapp-kaushik-shahares-projects.vercel.app",
-    ],
+    origin: ["*"],
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -35,6 +35,12 @@ app.use("/auth", authRouter);
 app.use("/chats", chatsRouter);
 
 app.use("/users", userRouter);
+
+app.use(express.static(path.join(_dirname, "/frontend/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(_dirname + "/frontend/build/index.html"));
+});
 
 server.listen(3001, () => {
   console.log("listening on *:3001");

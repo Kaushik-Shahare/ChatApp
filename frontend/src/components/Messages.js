@@ -12,7 +12,7 @@ const Messages = ({ conversationId, sendMessage }) => {
   const changeSender = (senderId) => {
     try {
       axios
-        .get(`https://chat-app-api-theta.vercel.app/users/${senderId}`, {
+        .get(`http://localhost:3001/users/${senderId}`, {
           headers: {
             Authorization:
               "Bearer " + localStorage.getItem("token").split('"')[1],
