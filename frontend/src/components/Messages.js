@@ -41,12 +41,15 @@ const Messages = ({ conversationId, sendMessage }) => {
   useEffect(() => {
     try {
       axios
-        .get(`https://chat-app-api-theta.vercel.app/chats/${conversationId}`, {
-          headers: {
-            Authorization:
-              "Bearer " + localStorage.getItem("token").split('"')[1],
-          },
-        })
+        .get(
+          `https://kaushik-shahare-chatapp.onrender.com/chats/${conversationId}`,
+          {
+            headers: {
+              Authorization:
+                "Bearer " + localStorage.getItem("token").split('"')[1],
+            },
+          }
+        )
         .then((response) => {
           setMessages(response.data);
         });

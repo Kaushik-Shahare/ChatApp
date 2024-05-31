@@ -5,7 +5,6 @@ const SearchInput = ({ conversations, changeConversation }) => {
 
   const handleChange = (e) => {
     setSearch(e.target.value);
-    console.log(search);
   };
 
   const handleSubmit = (e) => {
