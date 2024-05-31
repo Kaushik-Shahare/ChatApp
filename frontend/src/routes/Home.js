@@ -21,7 +21,7 @@ const Home = () => {
   useEffect(() => {
     if (localStorage.getItem("token") !== null) {
       axios
-        .get("http://localhost:3001/users", {
+        .get("https://kaushik-shahare-chatapp.onrender.com/users", {
           headers: {
             Authorization:
               "Bearer " + localStorage.getItem("token").split('"')[1],

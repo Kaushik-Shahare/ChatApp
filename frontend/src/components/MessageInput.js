@@ -14,7 +14,7 @@ const MessageInput = ({ conversationId, SendMessage }) => {
     try {
       await axios
         .post(
-          `http://localhost:3001/chats/send/${conversationId}`,
+          `https://kaushik-shahare-chatapp.onrender.com/chats/send/${conversationId}`,
           {
             message: messageInput,
           },

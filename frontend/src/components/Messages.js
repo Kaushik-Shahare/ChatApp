@@ -12,7 +12,7 @@ const Messages = ({ conversationId, sendMessage }) => {
   const changeSender = (senderId) => {
     try {
       axios
-        .get(`http://localhost:3001/users/${senderId}`, {
+        .get(`https://kaushik-shahare-chatapp.onrender.com/users/${senderId}`, {
           headers: {
             Authorization:
               "Bearer " + localStorage.getItem("token").split('"')[1],

@@ -14,7 +14,7 @@ export const SocketContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      const socket = io("http://localhost:3001", {
+      const socket = io("https://kaushik-shahare-chatapp.onrender.com", {
         query: {
           userId: localStorage.getItem("userId").split('"')[1],
         },

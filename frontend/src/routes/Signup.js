@@ -31,7 +31,7 @@ const Signup = () => {
     // Add your signup logic here
     axios
       .post(
-        "http://localhost:3001/auth/signup",
+        "https://kaushik-shahare-chatapp.onrender.com/auth/signup",
         {
           username: username,
           fullName: fullname,
