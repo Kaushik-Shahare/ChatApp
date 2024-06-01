@@ -36,11 +36,11 @@ app.use("/chats", chatsRouter);
 
 app.use("/users", userRouter);
 
-// app.use(express.static(path.join(_dirname, "/frontend/build")));
+app.use(express.static(path.join(_dirname, "/frontend/build")));
 
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(_dirname + "/frontend/build/index.html"));
-// });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(_dirname + "/frontend/build/index.html"));
+});
 
 server.listen(3001, () => {
   console.log("listening on *:3001");
