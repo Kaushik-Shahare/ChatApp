@@ -102,7 +102,9 @@ const getMessages = async (req, res) => {
       return res.status(200).json([]);
     }
 
-    res.status(200).json(chat.messages);
+    res
+      .status(200)
+      .json({ messages: chat.messages, participants: chat.participants });
   } catch (err) {
     console.log("Error in getMessages controller: ", err.message);
     res

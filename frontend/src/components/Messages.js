@@ -5,6 +5,7 @@ import { useSocketContext } from "../context/SocketContext";
 
 const Messages = ({ conversationId, sendMessage }) => {
   const [messages, setMessages] = useState([]);
+  const [participants, setParticipants] = useState([]);
   const lastMessageRef = useRef();
   const { socketMessage } = useSocketContext();
   const [sender, setSender] = useState({});
@@ -29,8 +30,8 @@ const Messages = ({ conversationId, sendMessage }) => {
   useEffect(() => {
     if (
       socketMessage &&
-      sender[socketMessage.sender] &&
-      sender[socketMessage.receiver]
+      participants.includes(socketMessage.sender) &&
+      participants.includes(socketMessage.receiver)
     ) {
       setMessages((messages) => [...messages, socketMessage]);
     }
@@ -55,7 +56,8 @@ const Messages = ({ conversationId, sendMessage }) => {
           }
         )
         .then((response) => {
-          setMessages(response.data);
+          setMessages(response.data.messages);
+          setParticipants(response.data.participants);
         });
     } catch (err) {
       console.log(err);
