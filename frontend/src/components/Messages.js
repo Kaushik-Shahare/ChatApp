@@ -27,10 +27,12 @@ const Messages = ({ conversationId, sendMessage }) => {
   };
 
   useEffect(() => {
-    if (socketMessage) {
-      if (socketMessage.sender === messages[0].sender) {
-        setMessages((messages) => [...messages, socketMessage]);
-      }
+    if (
+      socketMessage &&
+      sender[socketMessage.sender] &&
+      sender[socketMessage.receiver]
+    ) {
+      setMessages((messages) => [...messages, socketMessage]);
     }
   }, [socketMessage]);
 
