@@ -60,15 +60,21 @@ const Signup = () => {
       });
   };
 
+  const [passwordShown, setPasswordShown] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordShown((passwordShown) => !passwordShown);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-w-96 mx-auto ">
       <div className="w-full p-6 rounded-lg shadow-md bg-grey-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
-        <h1 className="text-3x1 font-semibold text-center text-gray-500">
+        <h1 className="text-3x1 font-semibold text-center text-gray-900">
           Sign Up
         </h1>
         <form onSubmit={handleSubmit}>
           <div>
-            <label>Username:</label>
+            <label className="text-white">Username:</label>
             <input
               type="text"
               placeholder="Enter username"
@@ -79,7 +85,7 @@ const Signup = () => {
             />
           </div>
           <div>
-            <label>Full Name:</label>
+            <label className="text-white">Full Name:</label>
             <input
               type="text"
               placeholder="Enter full name"
@@ -90,7 +96,7 @@ const Signup = () => {
             />
           </div>
           <div>
-            <label>Email:</label>
+            <label className="text-white">Email:</label>
             <input
               type="email"
               placeholder="Enter email"
@@ -101,17 +107,19 @@ const Signup = () => {
             />
           </div>
           <div>
-            <label>Password:</label>
+            <label className="text-white">Password:</label>
             <input
-              type="password"
+              type={passwordShown ? "text" : "password"}
               placeholder="Enter password"
               className="w-full p-2 my-2 border border-gray-300 rounded-lg"
               value={password}
               onChange={handlePasswordChange}
               name="password"
             />
+            <input type="checkbox" onChange={togglePasswordVisibility} />
+            <a className="text-white">Show Password</a>
           </div>
-          <a className="text-gray-500" href="/signin">
+          <a className="text-blue-400" href="/signin">
             Already have an account?
           </a>
           <div>

@@ -9,7 +9,6 @@ const MessageContainer = ({ conversationId, conversationUsername }) => {
 
   const SendMessage = (message) => {
     setSendMessage(message);
-    console.log("message", message);
   };
 
   if (conversationId !== "") {

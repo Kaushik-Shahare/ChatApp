@@ -3,8 +3,8 @@
 @import "tailwindcss/utilities";
 
 body {
-  background: linear-gradient(rgb(0, 0, 0, 0.2), rgb(0, 0, 0, 0.2)),
-    url("./chatApp.bg.avif");
+  background: linear-gradient(rgb(0, 0, 0, 0.44), rgb(0, 0, 0, 0.3)),
+    url("./Designer.jpeg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

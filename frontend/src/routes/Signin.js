@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -52,15 +52,20 @@ const Signin = () => {
       });
   };
 
+  const [passwordShown, setPasswordShown] = useState(false);
+  const togglePasswordVisibility = () => {
+    setPasswordShown((passwordShown) => !passwordShown);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-w-96 mx-auto ">
-      <div className="w-full p-6 rounded-lg shadow-md bg-grey-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
-        <h1 className="text-3x1 font-semibold text-center text-gray-500">
+      <div className="w-full p-6 rounded-lg shadow-md bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0 bg-grey-400">
+        <h1 className="text-3x1 font-semibold text-center text-gray-100 ">
           Sign In
         </h1>
         <form onSubmit={handleSubmit}>
           <div>
-            <label>Email:</label>
+            <label className="text-white">Email:</label>
             <input
               type="email"
               placeholder="Enter email"
@@ -71,17 +76,19 @@ const Signin = () => {
             />
           </div>
           <div>
-            <label>Password:</label>
+            <label className="text-white">Password:</label>
             <input
-              type="password"
+              type={passwordShown ? "text" : "password"}
               placeholder="Enter password"
               className="w-full p-2 my-2 border border-gray-300 rounded-lg"
               value={password}
               onChange={handlePasswordChange}
               name="password"
             />
+            <input type="checkbox" onChange={togglePasswordVisibility} />{" "}
+            <a className="text-white">Show Password</a>
           </div>
-          <a className="text-gray-500" href="/signup">
+          <a className="text-blue-400" href="/signup">
             Don't have an account?
           </a>
           <div>
