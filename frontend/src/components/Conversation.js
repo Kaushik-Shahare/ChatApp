@@ -15,7 +15,7 @@ const Conversation = ({ conversation, changeConversation, conversationId }) => {
   return (
     <div
       className={`flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 ${
-        isSelected ? "bg-sky-500" : ""
+        isSelected ? "bg-sky-600" : ""
       }`}
       onClick={handleConversationChange}
     >
@@ -28,7 +28,7 @@ const Conversation = ({ conversation, changeConversation, conversationId }) => {
           ></div>
         </div>
       </div>
-      <div className="pl-2">
+      <div className="pl-2 text-white">
         <p>{username}</p>
       </div>
     </div>

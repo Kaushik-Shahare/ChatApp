@@ -21,7 +21,7 @@ const Home = () => {
   useEffect(() => {
     if (localStorage.getItem("token") !== null) {
       axios
-        .get("https://kaushik-shahare-chatapp.onrender.com/users", {
+        .get("http://localhost:3001/users", {
           headers: {
             Authorization:
               "Bearer " + localStorage.getItem("token").split('"')[1],
@@ -45,7 +45,7 @@ const Home = () => {
 
   return (
     <SocketContextProvider>
-      <div className="flex sm:h-[450px] md:h-[550px] rounded-lg overflow-hidden bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
+      <div className="flex sm:h-[450px] md:h-[550px] lg:h-[750px] lg:w-[60%] rounded-lg overflow-hidden bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
         <Sidebar
           conversations={conversations}
           conversationId={conversationId}

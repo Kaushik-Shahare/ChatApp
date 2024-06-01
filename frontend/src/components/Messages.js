@@ -12,7 +12,7 @@ const Messages = ({ conversationId, sendMessage }) => {
   const changeSender = (senderId) => {
     try {
       axios
-        .get(`https://kaushik-shahare-chatapp.onrender.com/users/${senderId}`, {
+        .get(`http://localhost:3001/users/${senderId}`, {
           headers: {
             Authorization:
               "Bearer " + localStorage.getItem("token").split('"')[1],
@@ -41,15 +41,12 @@ const Messages = ({ conversationId, sendMessage }) => {
   useEffect(() => {
     try {
       axios
-        .get(
-          `https://kaushik-shahare-chatapp.onrender.com/chats/${conversationId}`,
-          {
-            headers: {
-              Authorization:
-                "Bearer " + localStorage.getItem("token").split('"')[1],
-            },
-          }
-        )
+        .get(`http://localhost:3001/chats/${conversationId}`, {
+          headers: {
+            Authorization:
+              "Bearer " + localStorage.getItem("token").split('"')[1],
+          },
+        })
         .then((response) => {
           setMessages(response.data);
         });

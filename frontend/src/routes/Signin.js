@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +21,7 @@ const Signin = () => {
     // Add your signin logic here
     axios
       .post(
-        "https://kaushik-shahare-chatapp.onrender.com/auth/signin",
+        "http://localhost:3001/auth/signin",
         {
           email: email,
           password: password,

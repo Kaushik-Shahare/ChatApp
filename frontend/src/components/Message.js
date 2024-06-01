@@ -33,16 +33,24 @@ const Message = ({ message, changeSender, sender }) => {
           />
         </div>
       )}
-      <div
-        className={`inline-flex flex-col  space-x-4 rounded-xl px-2 max-w-xl ${
-          username === localUsername ? "bg-blue-500" : "bg-sky-500"
-        }`}
-      >
-        <div>
-          <p className="font-bold">{username}</p>
-          <p className="break-words">{message.message}</p>
+      <div>
+        <div
+          className={`inline-flex flex-col  space-x-4 rounded-xl px-2 max-w-xl ${
+            username === localUsername ? "bg-gray-800" : "bg-gray-500"
+          }`}
+        >
+          <div>
+            <p className="font-bold text-white pb-2">{username}</p>
+            <p className="break-words text-white pl-2">{message.message}</p>
+          </div>
         </div>
-        <div className="">{time}</div>
+        <div
+          className={`text-white flex ${
+            username === localUsername ? "justify-end" : "justify-start"
+          }`}
+        >
+          {time}
+        </div>
       </div>
       {username === localUsername && (
         <div className="pt-3">

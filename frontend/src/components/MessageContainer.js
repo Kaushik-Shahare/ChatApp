@@ -16,15 +16,13 @@ const MessageContainer = ({ conversationId, conversationUsername }) => {
   }
 
   return (
-    <div className="md:min-w-[450px] flex flex-col">
+    <div className="md:min-w-[450px] w-full flex flex-col">
       {noChatSelected ? (
         <NoChatSelected />
       ) : (
         <>
           <div className="bg-slate-500 px-4 py-2 mb-2">
-            <span className="text-gray-900 font-bold">
-              {conversationUsername}
-            </span>
+            <span className="text-white font-bold">{conversationUsername}</span>
           </div>
           <Messages conversationId={conversationId} sendMessage={sendMessage} />
           <MessageInput
