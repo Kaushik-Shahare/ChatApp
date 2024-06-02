@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import img from "../assets/images/profile.png";
 
 const Message = ({ message, changeSender, sender }) => {
   const [username, setUsername] = useState("");
@@ -26,11 +27,7 @@ const Message = ({ message, changeSender, sender }) => {
     >
       {username !== localUsername && (
         <div className="pt-3">
-          <img
-            src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
-            alt="avatar"
-            className="h-10 w-10 rounded-full "
-          />
+          <img src={img} alt="avatar" className="h-10 w-10 rounded-full " />
         </div>
       )}
       <div>
@@ -54,11 +51,7 @@ const Message = ({ message, changeSender, sender }) => {
       </div>
       {username === localUsername && (
         <div className="pt-3">
-          <img
-            src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
-            alt="avatar"
-            className="h-10 w-10 rounded-full "
-          />
+          <img src={img} alt="avatar" className="h-10 w-10 rounded-full " />
         </div>
       )}
     </div>

@@ -1,11 +1,11 @@
 import React from "react";
 import SearchInput from "./SearchInput";
 import Conversations from "./Conversations";
-import LogoutButton from "./LogoutButton";
+import UserSizebar from "./UserSidebar";
 
 const Sidebar = ({ conversations, changeConversation, conversationId }) => {
   return (
-    <div className="flex flex-col justify-between">
+    <div className="flex flex-col justify-between border-r border-gray-600">
       <div>
         <SearchInput
           conversations={conversations}
@@ -19,7 +19,7 @@ const Sidebar = ({ conversations, changeConversation, conversationId }) => {
         />
       </div>
       <div className="w-full">
-        <LogoutButton />
+        <UserSizebar />
       </div>
     </div>
   );

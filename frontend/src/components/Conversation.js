@@ -1,5 +1,6 @@
 import React from "react";
 import { useSocketContext } from "../context/SocketContext";
+import img from "../assets/images/profile.png";
 
 const Conversation = ({ conversation, changeConversation, conversationId }) => {
   const username = conversation.username;
@@ -20,6 +21,11 @@ const Conversation = ({ conversation, changeConversation, conversationId }) => {
       onClick={handleConversationChange}
     >
       <div>
+        <img
+          src={img}
+          alt="profile"
+          className="w-10 h-10 rounded-full absolute"
+        />
         <div className="w-10 h-10 rounded-full bg-gray-500">
           <div
             className={`h-3 w-3 ml-8 rounded-full relative ${
