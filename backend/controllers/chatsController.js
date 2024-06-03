@@ -55,7 +55,7 @@ const sendMessage = async (req, res) => {
     });
 
     if (!chat) {
-      let chat = await Chat.create({
+      chat = await Chat.create({
         participants: [sender, receiverId],
       });
     }
