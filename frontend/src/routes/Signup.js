@@ -69,7 +69,7 @@ const Signup = () => {
   return (
     <div className="flex flex-col items-center justify-center min-w-96 mx-auto ">
       <div className="w-full p-6 rounded-lg shadow-md bg-grey-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
-        <h1 className="text-3x1 font-semibold text-center text-gray-900">
+        <h1 className="text-3x1 font-semibold text-center text-white">
           Sign Up
         </h1>
         <form onSubmit={handleSubmit}>
@@ -78,7 +78,7 @@ const Signup = () => {
             <input
               type="text"
               placeholder="Enter username"
-              className="w-full p-2 my-2 border border-gray-300 rounded-lg"
+              className="w-full p-2 my-2 border border-gray-300 rounded-lg bg-transparent text-white"
               value={username}
               onChange={handleUsernameChange}
               name="username"
@@ -89,7 +89,7 @@ const Signup = () => {
             <input
               type="text"
               placeholder="Enter full name"
-              className="w-full p-2 my-2 border border-gray-300 rounded-lg"
+              className="w-full p-2 my-2 border border-gray-300 rounded-lg bg-transparent text-white"
               value={fullname}
               onChange={handleFullnameChange}
               name="fullname"
@@ -100,7 +100,7 @@ const Signup = () => {
             <input
               type="email"
               placeholder="Enter email"
-              className="w-full p-2 my-2 border border-gray-300 rounded-lg"
+              className="w-full p-2 my-2 border border-gray-300 rounded-lg bg-transparent text-white"
               value={email}
               onChange={handleEmailChange}
               name="email"
@@ -111,7 +111,7 @@ const Signup = () => {
             <input
               type={passwordShown ? "text" : "password"}
               placeholder="Enter password"
-              className="w-full p-2 my-2 border border-gray-300 rounded-lg"
+              className="w-full p-2 my-2 border border-gray-300 rounded-lg bg-transparent text-white"
               value={password}
               onChange={handlePasswordChange}
               name="password"

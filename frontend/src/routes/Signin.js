@@ -69,7 +69,7 @@ const Signin = () => {
             <input
               type="email"
               placeholder="Enter email"
-              className="w-full p-2 my-2 border border-gray-300 rounded-lg"
+              className="w-full p-2 my-2 border border-gray-300 rounded-lg bg-transparent text-white"
               value={email}
               onChange={handleEmailChange}
               name="email"
@@ -80,7 +80,7 @@ const Signin = () => {
             <input
               type={passwordShown ? "text" : "password"}
               placeholder="Enter password"
-              className="w-full p-2 my-2 border border-gray-300 rounded-lg"
+              className="w-full p-2 my-2 border border-gray-300 rounded-lg bg-transparent text-white"
               value={password}
               onChange={handlePasswordChange}
               name="password"
