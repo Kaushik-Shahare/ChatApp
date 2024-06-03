@@ -71,7 +71,7 @@ const Messages = ({ conversationId, sendMessage }) => {
   }, [messages]);
 
   return (
-    <div className="flex flex-col p-4 space-y-2 overflow-auto">
+    <div className="flex flex-col p-4 space-y-2 overflow-auto h-full">
       {messages.map((message, index) => (
         <div key={index} ref={lastMessageRef}>
           <Message
