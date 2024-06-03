@@ -39,7 +39,11 @@ const Messages = ({ conversationId, sendMessage }) => {
 
   useEffect(() => {
     if (sendMessage) {
-      setMessages((messages) => [...messages, sendMessage]);
+      if (messages) {
+        setMessages((messages) => [...messages, sendMessage]);
+      } else {
+        setMessages([sendMessage]);
+      }
     }
   }, [sendMessage]);
 
