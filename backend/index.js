@@ -39,9 +39,9 @@ mongoose
     console.log("Error while connecting to MongoDB", error);
   });
 
-app.get("/", (req, res) => {
-  res.send("Server is running");
-});
+// app.get("/", (req, res) => {
+//   res.send("Server is running");
+// });
 
 passport.use(
   "google",
@@ -73,6 +73,8 @@ passport.use(
             password: hashedPassword,
             profilePicture: profile.photos[0].value,
           });
+
+          await user.save();
         }
 
         // Generate JWT token
