@@ -12,7 +12,9 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth2").Strategy;
 
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const User = require("./models/user");
+const saltRounds = 10;
 
 dotenv.config();
 
