@@ -8,6 +8,8 @@ const userRouter = require("./routes/userRoutes");
 const dotenv = require("dotenv");
 const { app } = require("./socket/socket");
 const _dirname = path.resolve();
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth2").Strategy;
 
 dotenv.config();
 
@@ -21,14 +23,35 @@ app.use(
 );
 
 try {
-  mongoose.connect(process.env.MONGO_DB_URI);
-  console.log("Connected to MongoDB");
+  mongoose.connect(process.env.MONGO_DB_URI).then(() => {
+    console.log("Connected to MongoDB");
+  });
 } catch (error) {
   console.log("Error while connecting to MongoDB", error);
 }
 app.get("/", (req, res) => {
   res.send("Server is running");
 });
+
+app.use(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+passport.use(
+  "google",
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:3001/auth/google/secrets",
+      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+    },
+    async (accessToken, refreshToken, profile, cb) => {
+      console.log("profile", profile);
+    }
+  )
+);
 
 app.use("/auth", authRouter);
 
