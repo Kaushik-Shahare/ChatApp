@@ -11,9 +11,15 @@ const _dirname = path.resolve();
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth2").Strategy;
 
+const jwt = require("jsonwebtoken");
+const User = require("./models/user");
+
 dotenv.config();
 
 app.use(express.json());
+
+app.use(passport.initialize());
+
 app.use(
   cors({
     origin: "*",
@@ -22,21 +28,18 @@ app.use(
   })
 );
 
-try {
-  mongoose.connect(process.env.MONGO_DB_URI).then(() => {
+mongoose
+  .connect(process.env.MONGO_DB_URI)
+  .then(() => {
     console.log("Connected to MongoDB");
+  })
+  .catch((error) => {
+    console.log("Error while connecting to MongoDB", error);
   });
-} catch (error) {
-  console.log("Error while connecting to MongoDB", error);
-}
+
 app.get("/", (req, res) => {
   res.send("Server is running");
 });
-
-app.use(
-  "/auth1/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
 
 passport.use(
   "google",
@@ -45,11 +48,45 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL:
-        "https://kaushik-shahare-chatapp.onrender.com/auth1/google/secrets",
+        "https://kaushik-shahare-chatapp.onrender.com/auth/google/callback",
+      scope: ["profile", "email"],
       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
     },
     async (accessToken, refreshToken, profile, cb) => {
-      console.log("profile", profile);
+      try {
+        // Find or create user in the database
+        let user = await User.findOne({ googleId: profile.id });
+        if (!user) {
+          const hashedPassword = await bcrypt.hash(
+            "defaultPassword",
+            saltRounds
+          );
+
+          user = new User({
+            googleId: profile.id,
+            displayName: profile.displayName,
+            email: profile.emails[0].value,
+            fullName: profile.displayName,
+            username: profile.emails[0].value.split("@")[0],
+            password: hashedPassword,
+            profilePicture: profile.photos[0].value,
+          });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign(
+          { email: user.email, id: user._id },
+          process.env.SECRET_KEY,
+          {
+            expiresIn: "1h",
+          }
+        );
+
+        // Pass the token to the callback
+        return cb(null, { token, user });
+      } catch (error) {
+        return cb(error, null);
+      }
     }
   )
 );

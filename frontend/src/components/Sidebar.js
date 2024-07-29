@@ -1,7 +1,7 @@
 import React from "react";
 import SearchInput from "./SearchInput";
 import Conversations from "./Conversations";
-import UserSizebar from "./UserSidebar";
+import UserSidebar from "./UserSidebar";
 
 const Sidebar = ({ conversations, changeConversation, conversationId }) => {
   return (
@@ -19,7 +19,7 @@ const Sidebar = ({ conversations, changeConversation, conversationId }) => {
         />
       </div>
       <div className="w-full">
-        <UserSizebar />
+        <UserSidebar />
       </div>
     </div>
   );

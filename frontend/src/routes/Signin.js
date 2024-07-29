@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -52,6 +52,32 @@ const Signin = () => {
       });
   };
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    var token = urlParams.get("token");
+    var username = urlParams.get("username");
+    const userId = urlParams.get("userId");
+
+    if (token && username && userId) {
+      token = '"' + token + '"';
+      console.log(token);
+      localStorage.setItem("token", token);
+
+      username = '"' + username + '"';
+      console.log(username);
+      localStorage.setItem("username", username);
+      localStorage.setItem("userId", userId);
+      navigate("/home");
+    }
+  }, []);
+
+  const googleAuth = () => {
+    window.open(
+      "https://kaushik-shahare-chatapp.onrender.com/auth/google",
+      "_self"
+    );
+  };
+
   const [passwordShown, setPasswordShown] = useState(false);
   const togglePasswordVisibility = () => {
     setPasswordShown((passwordShown) => !passwordShown);
@@ -101,11 +127,7 @@ const Signin = () => {
           </div>
         </form>
         <button
-          onClick={() => {
-            window.location.href =
-              "https://kaushik-shahare-chatapp.onrender.com/auth/google";
-            // "https://localhost:3001/auth1/google";
-          }}
+          onClick={googleAuth}
           className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
         >
           Google
