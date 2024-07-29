@@ -100,6 +100,16 @@ const Signin = () => {
             </button>
           </div>
         </form>
+        <button
+          onClick={() => {
+            window.location.href =
+              // "https://kaushik-shahare-chatapp.onrender.com/auth/google";
+              "https://localhost:3001/auth/google";
+          }}
+          className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Google
+        </button>
       </div>
     </div>
   );
