@@ -7,7 +7,7 @@ const Conversations = ({
   conversationId,
 }) => {
   return (
-    <div className="py-2 flex flex-col overflow-auto">
+    <div className="py-2 flex flex-col overflow-auto h-full">
       {conversations.map((conversation) => (
         <Conversation
           key={conversation._id}

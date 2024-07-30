@@ -20,7 +20,7 @@ const Conversation = ({ conversation, changeConversation, conversationId }) => {
       }`}
       onClick={handleConversationChange}
     >
-      <div>
+      <div className="relative">
         <img
           src={img}
           alt="profile"
