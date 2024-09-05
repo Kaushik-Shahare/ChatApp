@@ -16,7 +16,7 @@ const getReceiverSocketId = (receiverId) => {
   return userSocketMap[receiverId];
 };
 
-const userSocketMap = {}; //{userId: socketId}
+const userSocketMap = {}; // {userId: socketId}
 
 io.on("connection", (socket) => {
   const userId = socket.handshake.query.userId;
@@ -24,9 +24,26 @@ io.on("connection", (socket) => {
     userSocketMap[userId] = socket.id;
   }
 
-  //io.emit is used to send message to all connected clients
+  // Emit online users
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
+  // Handle initiating a call
+  socket.on("callUser", ({ userToCall, signalData, from }) => {
+    const socketId = getReceiverSocketId(userToCall);
+    if (socketId) {
+      io.to(socketId).emit("callUser", { signal: signalData, from });
+    }
+  });
+
+  // Handle answering a call
+  socket.on("answerCall", ({ to, signal }) => {
+    const socketId = getReceiverSocketId(to);
+    if (socketId) {
+      io.to(socketId).emit("callAccepted", signal);
+    }
+  });
+
+  // Handle disconnect
   socket.on("disconnect", () => {
     delete userSocketMap[userId];
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
