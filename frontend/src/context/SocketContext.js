@@ -1,13 +1,3 @@
-import { createContext, useState, useEffect, useContext } from "react";
-import io from "socket.io-client";
-import notificationSound from "../assets/sounds/notification.mp3";
-
-const SocketContext = createContext(null);
-
-export const useSocketContext = () => {
-  return useContext(SocketContext);
-};
-
 export const SocketContextProvider = ({ children }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [socketMessage, setSocketMessage] = useState({});
@@ -16,6 +6,7 @@ export const SocketContextProvider = ({ children }) => {
   const [callInProgress, setCallInProgress] = useState(false); // State to track ongoing calls
 
   let socket;
+
   useEffect(() => {
     socket = io("https://kaushik-shahare-chatapp.onrender.com", {
       query: {
@@ -47,7 +38,9 @@ export const SocketContextProvider = ({ children }) => {
         setCallAccepted(true);
       });
 
-      return () => socket.close(); // Clean up the socket connection on unmount
+      return () => {
+        socket.disconnect(); // Use disconnect instead of close
+      };
     }
   }, []);
 

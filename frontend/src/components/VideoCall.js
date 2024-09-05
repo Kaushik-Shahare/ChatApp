@@ -1,22 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
-import io from "socket.io-client";
 import Peer from "simple-peer";
-
-const socket = io.connect("http://localhost:3001"); // Replace with your server URL
+import { useSocketContext } from "../context/SocketContext";
 
 const VideoCall = ({ receiverId, userId }) => {
+  const { incomingCall, callAccepted, makeCall, acceptCall } =
+    useSocketContext();
   const [stream, setStream] = useState(null);
   const [receivingCall, setReceivingCall] = useState(false);
   const [caller, setCaller] = useState("");
   const [callerSignal, setCallerSignal] = useState(null);
-  const [callAccepted, setCallAccepted] = useState(false);
+  const [callInProgress, setCallInProgress] = useState(false);
 
   const myVideo = useRef();
   const userVideo = useRef();
   const connectionRef = useRef();
 
   useEffect(() => {
-    // Access the user's video and audio
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
@@ -29,9 +28,13 @@ const VideoCall = ({ receiverId, userId }) => {
       setCaller(from);
       setCallerSignal(signal);
     });
+
+    socket.on("callAccepted", (signal) => {
+      setCallInProgress(true);
+      connectionRef.current.signal(signal);
+    });
   }, []);
 
-  // Function to call the user
   const callUser = (id) => {
     const peer = new Peer({
       initiator: true,
@@ -51,17 +54,10 @@ const VideoCall = ({ receiverId, userId }) => {
       userVideo.current.srcObject = stream;
     });
 
-    socket.on("callAccepted", (signal) => {
-      setCallAccepted(true);
-      peer.signal(signal);
-    });
-
     connectionRef.current = peer;
   };
 
-  // Function to answer the call
   const answerCall = () => {
-    setCallAccepted(true);
     const peer = new Peer({
       initiator: false,
       trickle: false,
@@ -94,13 +90,15 @@ const VideoCall = ({ receiverId, userId }) => {
         )}
       </div>
       <div>
-        <button onClick={() => callUser(receiverId)}>Call User</button>
-        {receivingCall && !callAccepted ? (
+        {!callAccepted && !receivingCall && (
+          <button onClick={() => callUser(receiverId)}>Call User</button>
+        )}
+        {receivingCall && !callAccepted && (
           <div>
             <h1>{caller} is calling you...</h1>
             <button onClick={answerCall}>Answer</button>
           </div>
-        ) : null}
+        )}
       </div>
     </div>
   );

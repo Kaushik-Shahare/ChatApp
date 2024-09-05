@@ -8,8 +8,16 @@ import { useSocketContext } from "../context/SocketContext";
 const MessageContainer = ({ conversationId, conversationUsername, userId }) => {
   const [sendMessage, setSendMessage] = useState({});
   const { incomingCall, callInProgress, callAccepted, makeCall, acceptCall } =
-    useSocketContext(); // Use the socket context
+    useSocketContext();
   const [calling, setCalling] = useState(false);
+
+  useEffect(() => {
+    if (callAccepted || callInProgress) {
+      setCalling(true);
+    } else {
+      setCalling(false);
+    }
+  }, [callAccepted, callInProgress]);
 
   const SendMessage = (message) => {
     setSendMessage(message);
@@ -17,15 +25,15 @@ const MessageContainer = ({ conversationId, conversationUsername, userId }) => {
 
   const noChatSelected = conversationId === "";
 
-  // Handle starting a video call
   const handleCall = () => {
-    makeCall(conversationId, userId); // Initiate call with socket context
-    setCalling(true);
+    if (!callInProgress && !calling) {
+      makeCall(conversationId, userId); // Initiate call with socket context
+    }
   };
 
-  // Handle ending the call
   const handleEndCall = () => {
     setCalling(false);
+    // Notify server or clean up peer connections if needed
   };
 
   return (
@@ -65,7 +73,8 @@ const MessageContainer = ({ conversationId, conversationUsername, userId }) => {
             <span className="text-white font-bold">{conversationUsername}</span>
             <button
               className="bg-blue-400 rounded w-20 border-black"
-              onClick={handleCall} // Start the call when button is clicked
+              onClick={handleCall}
+              disabled={callInProgress || calling} // Disable button if a call is in progress
             >
               Call
             </button>
