@@ -15,8 +15,9 @@ export const SocketContextProvider = ({ children }) => {
   const [callAccepted, setCallAccepted] = useState(false); // State for accepting a call
   const [callInProgress, setCallInProgress] = useState(false); // State to track ongoing calls
 
+  let socket;
   useEffect(() => {
-    const socket = io("https://kaushik-shahare-chatapp.onrender.com", {
+    socket = io("https://kaushik-shahare-chatapp.onrender.com", {
       query: {
         userId: localStorage.getItem("userId").split('"')[1],
       },
