@@ -3,13 +3,12 @@ import Peer from "simple-peer";
 import { useSocketContext } from "../context/SocketContext";
 
 const VideoCall = ({ receiverId, userId }) => {
-  const { incomingCall, callAccepted, makeCall, acceptCall } =
-    useSocketContext();
+  const { socket } = useSocketContext(); // Access socket from context
   const [stream, setStream] = useState(null);
   const [receivingCall, setReceivingCall] = useState(false);
   const [caller, setCaller] = useState("");
   const [callerSignal, setCallerSignal] = useState(null);
-  const [callInProgress, setCallInProgress] = useState(false);
+  const [callAccepted, setCallAccepted] = useState(false);
 
   const myVideo = useRef();
   const userVideo = useRef();
@@ -28,12 +27,7 @@ const VideoCall = ({ receiverId, userId }) => {
       setCaller(from);
       setCallerSignal(signal);
     });
-
-    socket.on("callAccepted", (signal) => {
-      setCallInProgress(true);
-      connectionRef.current.signal(signal);
-    });
-  }, []);
+  }, [socket]);
 
   const callUser = (id) => {
     const peer = new Peer({
@@ -54,10 +48,16 @@ const VideoCall = ({ receiverId, userId }) => {
       userVideo.current.srcObject = stream;
     });
 
+    socket.on("callAccepted", (signal) => {
+      setCallAccepted(true);
+      peer.signal(signal);
+    });
+
     connectionRef.current = peer;
   };
 
   const answerCall = () => {
+    setCallAccepted(true);
     const peer = new Peer({
       initiator: false,
       trickle: false,
@@ -90,15 +90,13 @@ const VideoCall = ({ receiverId, userId }) => {
         )}
       </div>
       <div>
-        {!callAccepted && !receivingCall && (
-          <button onClick={() => callUser(receiverId)}>Call User</button>
-        )}
-        {receivingCall && !callAccepted && (
+        <button onClick={() => callUser(receiverId)}>Call User</button>
+        {receivingCall && !callAccepted ? (
           <div>
             <h1>{caller} is calling you...</h1>
             <button onClick={answerCall}>Answer</button>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );
