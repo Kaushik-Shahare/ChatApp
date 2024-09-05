@@ -1,5 +1,4 @@
-// SocketContext.js
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect, useContext, useRef } from "react";
 import io from "socket.io-client";
 import notificationSound from "../assets/sounds/notification.mp3";
 
@@ -15,59 +14,127 @@ export const SocketContextProvider = ({ children }) => {
   const [incomingCall, setIncomingCall] = useState(null); // State for incoming calls
   const [callAccepted, setCallAccepted] = useState(false); // State for accepting a call
   const [callInProgress, setCallInProgress] = useState(false); // State to track ongoing calls
+  const peerConnection = useRef(null); // Use a ref to keep track of the WebRTC peer connection
+  const socket = useRef(null); // Use a ref to persist socket connection across renders
 
-  let socket;
   useEffect(() => {
-    socket = io("https://kaushik-shahare-chatapp.onrender.com", {
+    socket.current = io("https://kaushik-shahare-chatapp.onrender.com", {
       query: {
         userId: localStorage.getItem("userId").split('"')[1],
       },
     });
 
-    if (localStorage.getItem("token")) {
-      // Handling online users
-      socket.on("getOnlineUsers", (users) => {
-        setOnlineUsers(users);
-      });
+    const pc = new RTCPeerConnection({
+      // Your STUN/TURN server configuration
+      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+    });
 
-      // Handling new messages
-      socket.on("message", (newMessage) => {
-        newMessage.shouldShake = true;
-        const sound = new Audio(notificationSound);
-        sound.play();
-        setSocketMessage(newMessage);
-      });
+    peerConnection.current = pc;
 
-      // Handling incoming call
-      socket.on("callUser", ({ from, signal }) => {
-        setIncomingCall({ from, signal });
-      });
+    // Handling online users
+    socket.current.on("getOnlineUsers", (users) => {
+      setOnlineUsers(users);
+    });
 
-      // Handling call accepted by the recipient
-      socket.on("callAccepted", (signal) => {
-        setCallAccepted(true);
-      });
+    // Handling new messages
+    socket.current.on("message", (newMessage) => {
+      newMessage.shouldShake = true;
+      const sound = new Audio(notificationSound);
+      sound.play();
+      setSocketMessage(newMessage);
+    });
 
-      return () => socket.close(); // Clean up the socket connection on unmount
-    }
-  }, []);
+    // Handling incoming call
+    socket.current.on("callUser", async ({ from, signal }) => {
+      setIncomingCall({ from, signal });
 
-  const makeCall = (userId, signalData) => {
-    if (socket) {
-      socket.emit("callUser", {
-        userToCall: userId,
-        signalData,
+      // Set up the peer connection and add the incoming stream
+      await pc.setRemoteDescription(new RTCSessionDescription(signal));
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+      socket.current.emit("answerCall", { to: from, signal: answer });
+    });
+
+    // Handling call accepted
+    socket.current.on("callAccepted", async (signal) => {
+      setCallAccepted(true);
+      setCallInProgress(true);
+      await pc.setRemoteDescription(new RTCSessionDescription(signal));
+    });
+
+    // Handling ICE candidates
+    socket.current.on("iceCandidate", async ({ candidate }) => {
+      await pc.addIceCandidate(new RTCIceCandidate(candidate));
+    });
+
+    // Handling end call
+    socket.current.on("endCall", () => {
+      setCallInProgress(false);
+      setCallAccepted(false);
+      setIncomingCall(null);
+      pc.close();
+    });
+
+    // Handling ICE candidate gathering
+    pc.onicecandidate = (event) => {
+      if (event.candidate) {
+        socket.current.emit("iceCandidate", {
+          candidate: event.candidate,
+          to: incomingCall?.from,
+        });
+      }
+    };
+
+    // Handling track events
+    pc.ontrack = (event) => {
+      const remoteStream = new MediaStream();
+      remoteStream.addTrack(event.track);
+      // Handle remote stream
+      // You might need to handle this stream in a separate component
+    };
+
+    return () => {
+      socket.current.disconnect();
+      pc.close();
+    };
+  }, [incomingCall]);
+
+  const makeCall = async (userId, signalData) => {
+    const pc = peerConnection.current;
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+    socket.current.emit("callUser", {
+      userToCall: userId,
+      signalData: offer,
+      from: localStorage.getItem("userId").split('"')[1],
+    });
+    setCallInProgress(true);
+  };
+
+  const acceptCall = async () => {
+    if (peerConnection.current && incomingCall) {
+      await peerConnection.current.setRemoteDescription(
+        new RTCSessionDescription(incomingCall.signal)
+      );
+      const answer = await peerConnection.current.createAnswer();
+      await peerConnection.current.setLocalDescription(answer);
+      socket.current.emit("answerCall", {
+        signal: answer,
+        to: incomingCall.from,
       });
+      setCallAccepted(true);
       setCallInProgress(true);
     }
   };
 
-  const acceptCall = () => {
-    if (socket && incomingCall) {
-      setCallInProgress(true);
-      setCallAccepted(true);
-      socket.emit("answerCall", { signal: incomingCall.signal });
+  const endCall = () => {
+    if (socket.current) {
+      socket.current.emit("endCall");
     }
+    setCallInProgress(false);
+    setCallAccepted(false);
+    setIncomingCall(null);
+    peerConnection.current.close();
   };
 
   return (
@@ -80,6 +147,7 @@ export const SocketContextProvider = ({ children }) => {
         callInProgress,
         makeCall,
         acceptCall,
+        endCall,
       }}
     >
       {children}

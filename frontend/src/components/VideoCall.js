@@ -1,103 +1,88 @@
-import React, { useEffect, useRef, useState } from "react";
-import Peer from "simple-peer";
+import React, { useEffect, useRef } from "react";
 import { useSocketContext } from "../context/SocketContext";
 
-const VideoCall = ({ receiverId, userId }) => {
-  const { socket } = useSocketContext(); // Access socket from context
-  const [stream, setStream] = useState(null);
-  const [receivingCall, setReceivingCall] = useState(false);
-  const [caller, setCaller] = useState("");
-  const [callerSignal, setCallerSignal] = useState(null);
-  const [callAccepted, setCallAccepted] = useState(false);
+const getMediaStreamFromSignal = async (signal) => {
+  const peerConnection = new RTCPeerConnection({
+    iceServers: [{ urls: "stun:stun.l.google.com:19302" }], // STUN server configuration
+  });
 
-  const myVideo = useRef();
-  const userVideo = useRef();
-  const connectionRef = useRef();
+  // Create a new MediaStream object
+  const remoteStream = new MediaStream();
+
+  peerConnection.ontrack = (event) => {
+    remoteStream.addTrack(event.track);
+  };
+
+  await peerConnection.setRemoteDescription(new RTCSessionDescription(signal));
+
+  const answer = await peerConnection.createAnswer();
+  await peerConnection.setLocalDescription(answer);
+
+  return { peerConnection, remoteStream };
+};
+
+const VideoCall = () => {
+  const { incomingCall, callAccepted } = useSocketContext();
+  const videoRef = useRef();
 
   useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        setStream(stream);
-        myVideo.current.srcObject = stream;
-      });
+    const setupStream = async () => {
+      if (incomingCall && !callAccepted) {
+        try {
+          const { peerConnection, remoteStream } =
+            await getMediaStreamFromSignal(incomingCall.signal);
 
-    socket.on("callUser", ({ from, signal }) => {
-      setReceivingCall(true);
-      setCaller(from);
-      setCallerSignal(signal);
-    });
-  }, [socket]);
+          if (videoRef.current) {
+            videoRef.current.srcObject = remoteStream;
+          }
 
-  const callUser = (id) => {
-    const peer = new Peer({
-      initiator: true,
-      trickle: false,
-      stream: stream,
-    });
+          // Handle cleanup
+          return () => {
+            if (videoRef.current) {
+              videoRef.current.srcObject = null;
+            }
+            peerConnection.close();
+          };
+        } catch (error) {
+          console.error("Error getting media stream:", error);
+        }
+      }
+    };
 
-    peer.on("signal", (data) => {
-      socket.emit("callUser", {
-        userToCall: id,
-        signalData: data,
-        from: userId,
-      });
-    });
+    const cleanup = setupStream();
 
-    peer.on("stream", (stream) => {
-      userVideo.current.srcObject = stream;
-    });
+    return () => {
+      if (cleanup) cleanup();
+    };
+  }, [incomingCall, callAccepted]);
 
-    socket.on("callAccepted", (signal) => {
-      setCallAccepted(true);
-      peer.signal(signal);
-    });
+  useEffect(() => {
+    const setupLocalStream = async () => {
+      try {
+        const localStream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        });
+        // Assuming you want to show local video as well
+        if (videoRef.current) {
+          videoRef.current.srcObject = localStream;
+        }
+      } catch (error) {
+        console.error("Error accessing local media devices:", error);
+      }
+    };
 
-    connectionRef.current = peer;
-  };
-
-  const answerCall = () => {
-    setCallAccepted(true);
-    const peer = new Peer({
-      initiator: false,
-      trickle: false,
-      stream: stream,
-    });
-
-    peer.on("signal", (data) => {
-      socket.emit("answerCall", { signal: data, to: caller });
-    });
-
-    peer.on("stream", (stream) => {
-      userVideo.current.srcObject = stream;
-    });
-
-    peer.signal(callerSignal);
-    connectionRef.current = peer;
-  };
+    setupLocalStream();
+  }, []);
 
   return (
     <div>
-      <div>
-        <video ref={myVideo} autoPlay playsInline style={{ width: "300px" }} />
-        {callAccepted && (
-          <video
-            ref={userVideo}
-            autoPlay
-            playsInline
-            style={{ width: "300px" }}
-          />
-        )}
-      </div>
-      <div>
-        <button onClick={() => callUser(receiverId)}>Call User</button>
-        {receivingCall && !callAccepted ? (
-          <div>
-            <h1>{caller} is calling you...</h1>
-            <button onClick={answerCall}>Answer</button>
-          </div>
-        ) : null}
-      </div>
+      <video
+        ref={videoRef}
+        autoPlay
+        id="remoteVideo"
+        style={{ width: "100%" }} // Adjust as needed
+      />
     </div>
   );
 };

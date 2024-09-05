@@ -43,10 +43,18 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("endCall", () => {
+    const socketId = getReceiverSocketId(userId);
+    if (socketId) {
+      io.to(socketId).emit("endCall");
+    }
+  });
+
   // Handle disconnect
   socket.on("disconnect", () => {
     delete userSocketMap[userId];
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
+    io.emit("endCall");
   });
 });
 

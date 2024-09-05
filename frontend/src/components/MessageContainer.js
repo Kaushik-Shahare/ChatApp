@@ -3,12 +3,20 @@ import Messages from "./Messages";
 import MessageInput from "./MessageInput";
 import NoChatSelected from "./NoChatSelected";
 import VideoCall from "./VideoCall"; // Import the VideoCall component
+import IncomingCallNotification from "./IncomingCallNotification"; // Import the new notification component
 import { useSocketContext } from "../context/SocketContext";
+import "./MessageContainer.css";
 
 const MessageContainer = ({ conversationId, conversationUsername, userId }) => {
   const [sendMessage, setSendMessage] = useState({});
-  const { incomingCall, callInProgress, callAccepted, makeCall, acceptCall } =
-    useSocketContext();
+  const {
+    incomingCall,
+    callInProgress,
+    callAccepted,
+    makeCall,
+    acceptCall,
+    rejectCall,
+  } = useSocketContext();
   const [calling, setCalling] = useState(false);
 
   useEffect(() => {
@@ -36,38 +44,21 @@ const MessageContainer = ({ conversationId, conversationUsername, userId }) => {
     // Notify server or clean up peer connections if needed
   };
 
+  const handleAcceptCall = () => {
+    acceptCall();
+  };
+
   return (
-    <div className="md:min-w-[450px] w-full flex flex-col">
+    <div className="md:min-w-[450px] w-full flex flex-col relative">
       {noChatSelected ? (
         <NoChatSelected />
-      ) : callInProgress || calling ? (
-        <div className="video-call-container">
-          <VideoCall receiverId={conversationId} userId={userId} />
-          <button
-            onClick={handleEndCall}
-            className="bg-red-500 text-white p-2 mt-2 rounded"
-          >
-            End Call
-          </button>
-        </div>
       ) : (
         <>
           {incomingCall && !callInProgress && (
-            <div className="incoming-call-container bg-green-500 p-4 rounded mb-4 text-white">
-              <h3>{incomingCall.from} is calling you...</h3>
-              <button
-                onClick={acceptCall}
-                className="bg-blue-500 p-2 rounded mr-4"
-              >
-                Accept
-              </button>
-              <button
-                onClick={handleEndCall}
-                className="bg-red-500 p-2 rounded"
-              >
-                Reject
-              </button>
-            </div>
+            <IncomingCallNotification
+              onAccept={handleAcceptCall}
+              onReject={() => rejectCall()}
+            />
           )}
           <div className="bg-slate-500 px-4 py-2 mb-2 flex justify-between">
             <span className="text-white font-bold">{conversationUsername}</span>
@@ -84,6 +75,14 @@ const MessageContainer = ({ conversationId, conversationUsername, userId }) => {
             conversationId={conversationId}
             SendMessage={SendMessage}
           />
+          {callInProgress && (
+            <div className="video-call-overlay">
+              <VideoCall receiverId={conversationId} userId={userId} />
+              <button onClick={handleEndCall} className="end-call-button">
+                End Call
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>
